@@ -51,9 +51,8 @@ html,
 body,
 #__next {
   @apply w-full;
-  @apply h-full;
-  @apply text-primary;
-  @apply bg-primary;
+  @apply min-h-screen;
+  @apply bg-background;
   @apply flex;
 }
 

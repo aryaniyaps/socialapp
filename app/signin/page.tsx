@@ -1,28 +1,31 @@
 import { Metadata } from "next";
 import Link from "next/link";
 
-import { LoginForm } from "./login-form";
+import { APP_NAME } from "@/lib/constants";
+import { SigninForm } from "./signin-form";
 
 export const metadata: Metadata = {
-  title: "Login",
-  description: "User login page.",
+  title: `sign in to ${APP_NAME}`,
+  description: "user sign in page",
 };
 
-export default function LoginPage() {
+export default function SigninPage() {
   return (
-    <div className="container mx-auto h-full max-w-sm flex flex-col items-center justify-center p-8">
+    <div className="container mx-auto max-w-sm flex flex-col items-center justify-center p-8">
       <div className="flex w-full flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <h1 className="text-2xl font-semibold tracking-tight">
-            Create an account
+            sign in to {APP_NAME}
           </h1>
           <p className="text-sm text-muted-foreground">
-            Enter your email below to create your account
+            enter your email to sign in to your account
           </p>
         </div>
-        <LoginForm />
+
+        <SigninForm />
+
         <p className="px-8 text-center text-sm text-muted-foreground">
-          By clicking continue, you agree to our{" "}
+          by clicking continue, you agree to our{" "}
           <Link
             href="/terms"
             className="underline underline-offset-4 hover:text-primary"
