@@ -9,24 +9,24 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      posts: {
+      profiles: {
         Row: {
-          content: string;
-          created_at: string;
-          id: number;
-          user_id: string | null;
+          id: string;
+          updated_at: string | null;
+          username: string;
+          avatar_url: string | null;
         };
         Insert: {
-          content: string;
-          created_at?: string;
-          id?: number;
-          user_id?: string | null;
+          id: string;
+          updated_at?: string | null;
+          username: string;
+          avatar_url?: string | null;
         };
         Update: {
-          content?: string;
-          created_at?: string;
-          id?: number;
-          user_id?: string | null;
+          id?: string;
+          updated_at?: string | null;
+          username: string;
+          avatar_url?: string | null;
         };
       };
     };
@@ -37,9 +37,6 @@ export interface Database {
       [_ in never]: never;
     };
     Enums: {
-      [_ in never]: never;
-    };
-    CompositeTypes: {
       [_ in never]: never;
     };
   };
