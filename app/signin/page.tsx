@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 
 import { APP_NAME } from "@/lib/constants";
 import { SigninForm } from "./signin-form";
+import { SocialLogin } from "./social-login";
 
 export const metadata: Metadata = {
   title: `sign in to ${APP_NAME}`,
@@ -39,6 +40,8 @@ export default async function SigninPage() {
         </div>
 
         <SigninForm />
+
+        <SocialLogin />
 
         <p className="px-8 text-center text-sm text-muted-foreground">
           by clicking continue, you agree to our{" "}

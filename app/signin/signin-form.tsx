@@ -39,6 +39,7 @@ export function SigninForm({ className, ...props }: SigninFormProps) {
   const supabase = createClientComponentClient();
 
   async function onSubmit(values: z.infer<typeof signinSchema>) {
+    console.log("SUBMIT TRIGGERED");
     // do something here
     await supabase.auth.signInWithOtp({
       email: values.email,
@@ -80,28 +81,6 @@ export function SigninForm({ className, ...props }: SigninFormProps) {
             sign in with email
           </Button>
         </div>
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              Or continue with
-            </span>
-          </div>
-        </div>
-        <Button
-          variant="outline"
-          type="button"
-          onClick={async () => {
-            await supabase.auth.signInWithOAuth({
-              provider: "google",
-              options: { redirectTo: `${location.origin}/auth/callback` },
-            });
-          }}
-        >
-          <Icons.google className="mr-2 h-4 w-4" /> Google
-        </Button>
       </form>
     </Form>
   );
