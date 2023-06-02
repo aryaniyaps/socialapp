@@ -1,5 +1,8 @@
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Metadata } from "next";
+import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { APP_NAME } from "@/lib/constants";
 import { SigninForm } from "./signin-form";
@@ -9,7 +12,20 @@ export const metadata: Metadata = {
   description: "user sign in page",
 };
 
-export default function SigninPage() {
+export default async function SigninPage() {
+  const supabase = createServerComponentClient({
+    cookies,
+  });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (session) {
+    // user is already logged in
+    redirect("/");
+  }
+
   return (
     <div className="container mx-auto max-w-sm flex flex-col items-center justify-center p-8">
       <div className="flex w-full flex-col justify-center space-y-6">
