@@ -21,7 +21,7 @@ export async function middleware(req: NextRequest) {
   redirectUrl.pathname = "/signin";
   // TODO: setup redirect URLs
   // redirectUrl.searchParams.set(`redirectTo`, req.nextUrl.pathname);
-  return NextResponse.rewrite(redirectUrl);
+  return NextResponse.redirect(redirectUrl);
 }
 
 export const config = {
