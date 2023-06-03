@@ -24,7 +24,7 @@ export default async function SigninPage() {
 
   if (session) {
     // user is already logged in
-    redirect("/");
+    redirect("/dashboard");
   }
 
   return (

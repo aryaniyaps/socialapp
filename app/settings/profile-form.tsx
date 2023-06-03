@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { Database } from "@/lib/database.types";
+import { Database, Profile } from "@/lib/database.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   User,
@@ -36,28 +36,22 @@ const profileSchema = z.object({
 
 interface ProfileFormProps extends React.HTMLAttributes<HTMLFormElement> {
   user: User;
+  profile: Profile;
 }
 
-export function ProfileForm({ user, className, ...props }: ProfileFormProps) {
+export function ProfileForm({
+  user,
+  profile,
+  className,
+  ...props
+}: ProfileFormProps) {
   const { toast } = useToast();
   const supabase = createClientComponentClient<Database>();
 
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
-    resetOptions: { keepDirtyValues: true },
-    defaultValues: async () => {
-      // this feels like a hack to me
-      const { data } = await supabase
-        .from("profiles")
-        .select("username, avatar_url")
-        .eq("id", user.id)
-        .single();
-
-      console.log(data);
-
-      return {
-        username: data!.username,
-      };
+    defaultValues: {
+      username: profile.username,
     },
   });
 

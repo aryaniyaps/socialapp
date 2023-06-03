@@ -16,7 +16,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -29,6 +29,10 @@ interface SigninFormProps extends React.HTMLAttributes<HTMLFormElement> {}
 export function SigninForm({ className, ...props }: SigninFormProps) {
   const router = useRouter();
 
+  const searchParams = useSearchParams();
+
+  const redirectTo = searchParams.get("redirectTo") || "/dashboard";
+
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof signinSchema>>({
@@ -39,11 +43,11 @@ export function SigninForm({ className, ...props }: SigninFormProps) {
   const supabase = createClientComponentClient();
 
   async function onSubmit(values: z.infer<typeof signinSchema>) {
-    console.log("SUBMIT TRIGGERED");
-    // do something here
     await supabase.auth.signInWithOtp({
       email: values.email,
-      options: { emailRedirectTo: `${location.origin}/auth/callback` },
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
     });
     toast({
       title: "email link sent",
