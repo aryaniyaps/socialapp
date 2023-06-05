@@ -1,6 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { APP_NAME } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { QueryClient } from "@tanstack/react-query";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 
@@ -19,6 +20,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const queryClient = new QueryClient();
+
   return (
     <html lang="en">
       <head />

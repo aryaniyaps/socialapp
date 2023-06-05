@@ -19,7 +19,7 @@ export function SocialLogin({ className, ...props }: SocialLoginProps) {
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
+            or continue with
           </span>
         </div>
       </div>
@@ -28,7 +28,9 @@ export function SocialLogin({ className, ...props }: SocialLoginProps) {
         onClick={async () => {
           await supabase.auth.signInWithOAuth({
             provider: "google",
-            options: { redirectTo: `${location.origin}/auth/callback` },
+            options: {
+              redirectTo: `${location.origin}/auth/callback/`,
+            },
           });
         }}
       >

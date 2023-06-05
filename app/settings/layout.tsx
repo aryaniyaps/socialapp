@@ -19,10 +19,6 @@ const sidebarNavItems = [
     title: "account",
     href: "/settings/account",
   },
-  {
-    title: "appearance",
-    href: "/settings/appearance",
-  },
 ];
 
 interface SettingsLayoutProps {

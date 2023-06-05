@@ -19,9 +19,9 @@ export async function middleware(req: NextRequest) {
   // Auth condition not met, redirect to signin page.
   const redirectUrl = req.nextUrl.clone();
   redirectUrl.pathname = "/signin";
-  // TODO: setup redirect URLs
-  // redirectUrl.searchParams.set(`redirectTo`, req.nextUrl.pathname);
-  return NextResponse.redirect(redirectUrl);
+  const redirectRes = NextResponse.redirect(redirectUrl);
+  redirectRes.cookies.set("continue", req.nextUrl.pathname);
+  return redirectRes;
 }
 
 export const config = {

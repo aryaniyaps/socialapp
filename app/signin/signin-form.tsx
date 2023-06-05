@@ -16,7 +16,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -28,10 +28,6 @@ interface SigninFormProps extends React.HTMLAttributes<HTMLFormElement> {}
 
 export function SigninForm({ className, ...props }: SigninFormProps) {
   const router = useRouter();
-
-  const searchParams = useSearchParams();
-
-  const redirectTo = searchParams.get("redirectTo") || "/dashboard";
 
   const { toast } = useToast();
 
@@ -45,8 +41,9 @@ export function SigninForm({ className, ...props }: SigninFormProps) {
   async function onSubmit(values: z.infer<typeof signinSchema>) {
     await supabase.auth.signInWithOtp({
       email: values.email,
+
       options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
+        emailRedirectTo: `${location.origin}/auth/callback/`,
       },
     });
     toast({

@@ -1,4 +1,4 @@
-import { UserNav } from "@/app/dashboard/components/user-nav";
+import { UserNav } from "@/app/dashboard/user-nav";
 import { Button } from "@/components/ui/button";
 import { APP_NAME } from "@/lib/constants";
 import { Database } from "@/lib/database.types";
