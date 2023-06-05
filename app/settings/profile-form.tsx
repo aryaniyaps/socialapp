@@ -74,37 +74,31 @@ export function ProfileForm({
 
   return (
     <Form {...form}>
-      {/* TODO: change this to server code and extract client side component separately */}
-      {form.formState.isLoading ? (
-        <h1>loading</h1>
-      ) : (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>username</FormLabel>
-                <FormControl>
-                  <Input placeholder="shadcn" {...field} />
-                </FormControl>
-                <FormDescription>
-                  this is your public display name. you can only change this
-                  once every 30 days
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>username</FormLabel>
+              <FormControl>
+                <Input placeholder="shadcn" {...field} />
+              </FormControl>
+              <FormDescription>
+                this is your public display name
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <Button
-            type="submit"
-            disabled={!form.formState.isDirty || form.formState.isSubmitting}
-          >
-            Update profile
-          </Button>
-        </form>
-      )}
+        <Button
+          type="submit"
+          disabled={!form.formState.isDirty || form.formState.isSubmitting}
+        >
+          Update profile
+        </Button>
+      </form>
     </Form>
   );
 }

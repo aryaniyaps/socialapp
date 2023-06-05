@@ -65,34 +65,29 @@ export function AccountForm({ user, className, ...props }: AccountFormProps) {
 
   return (
     <Form {...form}>
-      {/* TODO: change this to server code and extract client side component separately */}
-      {form.formState.isLoading ? (
-        <h1>loading</h1>
-      ) : (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>email address</FormLabel>
-                <FormControl>
-                  <Input placeholder="shadcn" {...field} />
-                </FormControl>
-                <FormDescription>your email address is private</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>email address</FormLabel>
+              <FormControl>
+                <Input placeholder="shadcn" {...field} />
+              </FormControl>
+              <FormDescription>your email address is private</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <Button
-            type="submit"
-            disabled={!form.formState.isDirty || form.formState.isSubmitting}
-          >
-            Update account
-          </Button>
-        </form>
-      )}
+        <Button
+          type="submit"
+          disabled={!form.formState.isDirty || form.formState.isSubmitting}
+        >
+          Update account
+        </Button>
+      </form>
     </Form>
   );
 }
