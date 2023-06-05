@@ -14,7 +14,8 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Database, Profile } from "@/lib/database.types";
+import { Database } from "@/lib/database.types";
+import { useProfileQuery } from "@/lib/queries/profile";
 import {
   User,
   createClientComponentClient,
@@ -22,8 +23,9 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export function UserNav({ user, profile }: { user: User; profile: Profile }) {
+export function UserNav({ user }: { user: User }) {
   const router = useRouter();
+  const { data: profile } = useProfileQuery(user.id);
   const supabase = createClientComponentClient<Database>();
 
   return (
@@ -40,7 +42,7 @@ export function UserNav({ user, profile }: { user: User; profile: Profile }) {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
-              {profile.username}
+              {profile?.username}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
               {user.email}

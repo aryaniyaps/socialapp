@@ -19,13 +19,6 @@ export default async function RootLayout({
     data: { session },
   } = await supabase.auth.getSession();
 
-  // load user profile
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", session!.user.id)
-    .single();
-
   return (
     <div className="w-full min-h-screen flex flex-col">
       <div className="border-b">
@@ -36,7 +29,7 @@ export default async function RootLayout({
               <Plus size={20} />
               new post
             </Button>
-            <UserNav user={session!.user} profile={profile!} />
+            <UserNav user={session!.user} />
           </div>
         </div>
       </div>

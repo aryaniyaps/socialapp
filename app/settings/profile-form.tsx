@@ -14,14 +14,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { Database, Profile } from "@/lib/database.types";
+import { useUpdateProfileMutation } from "@/lib/mutations/profile";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  User,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs";
+import { User } from "@supabase/auth-helpers-nextjs";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useProfileQuery } from "../../lib/queries/profile";
 
 const profileSchema = z.object({
   username: z
@@ -36,35 +34,29 @@ const profileSchema = z.object({
 
 interface ProfileFormProps extends React.HTMLAttributes<HTMLFormElement> {
   user: User;
-  profile: Profile;
 }
 
-export function ProfileForm({
-  user,
-  profile,
-  className,
-  ...props
-}: ProfileFormProps) {
+export function ProfileForm({ user, className, ...props }: ProfileFormProps) {
   const { toast } = useToast();
-  const supabase = createClientComponentClient<Database>();
+
+  const { data: profile } = useProfileQuery(user.id);
+
+  const mutation = useUpdateProfileMutation();
 
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      username: profile.username,
+      username: profile!.username,
     },
   });
 
   async function onSubmit(values: z.infer<typeof profileSchema>) {
-    const { data } = await supabase
-      .from("profiles")
-      .upsert({ id: user.id, username: values.username })
-      .select("username")
-      .single();
-
-    form.reset({
-      username: data!.username,
+    const result = await mutation.mutateAsync({
+      id: user.id,
+      username: values.username,
     });
+
+    form.reset({ username: result!.username });
 
     toast({
       title: "updated profile",

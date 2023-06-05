@@ -14,12 +14,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { Database } from "@/lib/database.types";
+import { useUpdateUserMutation } from "@/lib/mutations/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  User,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs";
+import { User } from "@supabase/auth-helpers-nextjs";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -35,7 +32,7 @@ interface AccountFormProps extends React.HTMLAttributes<HTMLFormElement> {
 
 export function AccountForm({ user, className, ...props }: AccountFormProps) {
   const { toast } = useToast();
-  const supabase = createClientComponentClient<Database>();
+  const mutation = useUpdateUserMutation();
 
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
@@ -45,15 +42,10 @@ export function AccountForm({ user, className, ...props }: AccountFormProps) {
   });
 
   async function onSubmit(values: z.infer<typeof profileSchema>) {
-    const { data } = await supabase.auth.updateUser(
-      { email: values.email },
-      { emailRedirectTo: "" }
-    );
-
-    await supabase.auth.refreshSession;
+    const result = await mutation.mutateAsync({ email: values.email });
 
     form.reset({
-      email: data.user!.email,
+      email: result!.user!.email,
     });
 
     toast({
