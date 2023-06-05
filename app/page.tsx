@@ -1,10 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { APP_NAME } from "@/lib/constants";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import Link from "next/link";
 
-export default async function Home() {
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
+import Hero from "./hero";
+import Navbar from "./navbar";
+import SectionTitle from "./section-title";
+
+export default async function LandingPage() {
   const supabase = createServerComponentClient({
     cookies,
   });
@@ -14,20 +16,18 @@ export default async function Home() {
   } = await supabase.auth.getSession();
 
   return (
-    <div className="w-full flex flex-col justify-center items-center">
-      <h1 className="text-2xl font-semibold tracking-tight">{APP_NAME}</h1>
-      <h3 className="mt-2">landing page</h3>
-      <div className="mt-4">
-        {session ? (
-          <Link href="/dashboard">
-            <Button>dashboard</Button>
-          </Link>
-        ) : (
-          <Link href="/signin">
-            <Button>sign in</Button>
-          </Link>
-        )}
-      </div>
+    <div className="flex flex-col w-full overflow-y-auto">
+      <Navbar session={session!} />
+      <Hero />
+      <SectionTitle
+        align="center"
+        pretitle="Nextly Benefits"
+        title=" Why should you use this landing page"
+      >
+        Nextly is a free landing page & marketing website template for startups
+        and indie projects. Its built with Next.js & TailwindCSS. And its
+        completely open-source.
+      </SectionTitle>
     </div>
   );
 }
