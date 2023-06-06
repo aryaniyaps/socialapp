@@ -1,25 +1,21 @@
-import { collection, doc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
 async function getProfile(userId: string) {
-  const profileCollection = collection(db, "profiles");
-  return doc(db, userId);
+  return await getDoc(doc(db, `profiles/${userId}`));
 }
 
-async function updateProfile(profile: {
-  id: string;
-  username?: string;
-  avatarUrl?: string;
-}) {
-  const result = await supabase
-    .from("profiles")
-    .update({ username: profile.username, avatar_url: profile.avatarUrl })
-    .match({ id: profile.id })
-    .select("*")
-    .throwOnError()
-    .single();
-
-  return result.data;
+async function updateProfile(
+  userId: string,
+  data: {
+    username?: string;
+    avatarUrl?: string;
+  }
+) {
+  return await updateDoc(doc(db, `profiles/${userId}`), {
+    username: data.username,
+    avatarUrl: data.avatarUrl,
+  });
 }
 
 function getUser() {
