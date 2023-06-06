@@ -4,13 +4,12 @@ import * as React from "react";
 
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { auth } from "@/lib/firebase";
+import { GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
 
 interface SocialLoginProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function SocialLogin({ className, ...props }: SocialLoginProps) {
-  const supabase = createClientComponentClient();
-
   return (
     <>
       <div className="relative">
@@ -26,12 +25,14 @@ export function SocialLogin({ className, ...props }: SocialLoginProps) {
       <Button
         variant="outline"
         onClick={async () => {
-          await supabase.auth.signInWithOAuth({
-            provider: "google",
-            options: {
-              redirectTo: `${location.origin}/auth/callback/`,
-            },
-          });
+          const provider = new GoogleAuthProvider();
+          await signInWithRedirect(auth, provider);
+          // await supabase.auth.signInWithOAuth({
+          //   provider: "google",
+          //   options: {
+          //     redirectTo: `${location.origin}/auth/callback/`,
+          //   },
+          // });
         }}
       >
         <Icons.google className="mr-2 h-4 w-4" /> Google

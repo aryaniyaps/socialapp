@@ -1,24 +1,14 @@
 import { UserNav } from "@/app/dashboard/user-nav";
 import { Button } from "@/components/ui/button";
 import { APP_NAME } from "@/lib/constants";
-import { Database } from "@/lib/database.types";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { auth } from "@/lib/firebase";
 import { Plus } from "lucide-react";
-import { cookies } from "next/headers";
 
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createServerComponentClient<Database>({
-    cookies,
-  });
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
   return (
     <div className="w-full min-h-screen flex flex-col">
       <div className="border-b">
@@ -29,7 +19,7 @@ export default async function RootLayout({
               <Plus size={20} />
               new post
             </Button>
-            <UserNav user={session!.user} />
+            <UserNav user={auth.currentUser!} />
           </div>
         </div>
       </div>

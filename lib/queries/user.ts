@@ -1,14 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import useSupabase from "../hooks/use-supabase";
+import repo from "../repo";
 
 export function useUserQuery() {
-  const supabase = useSupabase();
-
   const key = ["user"];
 
-  return useQuery(key, async () => {
-    const result = await supabase.auth.getUser();
-
-    return result.data;
+  return useQuery(key, () => {
+    return repo.getUser();
   });
 }

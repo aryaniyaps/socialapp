@@ -14,39 +14,47 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Database } from "@/lib/database.types";
 import { useProfileQuery } from "@/lib/queries/profile";
-import {
-  User,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs";
+import { User } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export function UserNav({ user }: { user: User }) {
   const router = useRouter();
-  const { data: profile } = useProfileQuery(user.id);
-  const supabase = createClientComponentClient<Database>();
+  const { data: profile, isLoading } = useProfileQuery(user.uid);
+
+  if (isLoading) {
+    return <h1>loading...</h1>;
+  }
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("avatars").getPublicUrl(profile!.avatarUrl);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-            <AvatarFallback>SC</AvatarFallback>
+            <AvatarImage src={publicUrl} alt={profile!.username} />
+            <AvatarFallback>AI</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">
-              {profile?.username}
-            </p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {user.email}
-            </p>
+          <div className="flex gap-4">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={publicUrl} alt={profile!.username} />
+              <AvatarFallback>AI</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm font-medium leading-none">
+                {profile!.username}
+              </p>
+              <p className="text-xs leading-none text-muted-foreground">
+                {user.email}
+              </p>
+            </div>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

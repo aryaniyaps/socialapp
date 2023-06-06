@@ -1,10 +1,9 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Metadata } from "next";
-import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { APP_NAME } from "@/lib/constants";
+import { auth } from "@/lib/firebase";
 import { SigninForm } from "./signin-form";
 import { SocialLogin } from "./social-login";
 
@@ -14,15 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function SigninPage() {
-  const supabase = createServerComponentClient({
-    cookies,
-  });
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (session) {
+  if (auth.currentUser) {
     // user is already logged in
     redirect("/dashboard");
   }

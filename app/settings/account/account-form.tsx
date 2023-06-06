@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { useUpdateUserMutation } from "@/lib/mutations/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@supabase/auth-helpers-nextjs";
+import { User } from "firebase/auth";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -37,16 +37,12 @@ export function AccountForm({ user, className, ...props }: AccountFormProps) {
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      email: user.email,
+      email: user.email!,
     },
   });
 
   async function onSubmit(values: z.infer<typeof profileSchema>) {
-    const result = await mutation.mutateAsync({ email: values.email });
-
-    form.reset({
-      email: result!.user!.email,
-    });
+    await mutation.mutateAsync({ email: values.email });
 
     toast({
       title: "confirmation link sent",

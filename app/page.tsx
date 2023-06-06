@@ -1,19 +1,10 @@
-import { cookies } from "next/headers";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { APP_NAME } from "@/lib/constants";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { auth } from "@/lib/firebase";
 
 export default async function LandingPage() {
-  const supabase = createServerComponentClient({
-    cookies,
-  });
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
   return (
     <div className="flex flex-col items-center justify-center w-full">
       <section className="mb-32 text-center">
@@ -30,7 +21,7 @@ export default async function LandingPage() {
           </div>
         </div>
       </section>
-      {session ? (
+      {auth.currentUser ? (
         <Link href="/dashboard">
           <Button variant="outline">open {APP_NAME}</Button>
         </Link>

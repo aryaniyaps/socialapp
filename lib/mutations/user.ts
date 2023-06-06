@@ -1,21 +1,17 @@
-import { UserAttributes } from "@supabase/supabase-js";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import useSupabase from "../hooks/use-supabase";
+import { User } from "firebase/auth";
+import { auth } from "../firebase";
 
 export function useUpdateUserMutation() {
-  const supabase = useSupabase();
-
   const queryClient = useQueryClient();
 
   return useMutation(
-    async (data: UserAttributes) => {
-      const result = await supabase.auth.updateUser(data);
-
-      return result.data;
+    async (data: User) => {
+      await auth.updateCurrentUser(data);
     },
     {
-      onSuccess(data) {
-        queryClient.setQueryData(["user"], data);
+      onSuccess() {
+        queryClient.invalidateQueries(["user"]);
       },
     }
   );

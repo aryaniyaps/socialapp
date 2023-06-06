@@ -1,19 +1,9 @@
 import { Separator } from "@/components/ui/separator";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { Database } from "@/lib/database.types";
-import { cookies } from "next/headers";
+import { auth } from "@/lib/firebase";
 import { AccountForm } from "./account-form";
 
 export default async function SettingsAccountPage() {
-  const supabase = createServerComponentClient<Database>({
-    cookies,
-  });
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
   return (
     <div className="space-y-6">
       <div>
@@ -23,7 +13,7 @@ export default async function SettingsAccountPage() {
         </p>
       </div>
       <Separator />
-      <AccountForm user={session!.user} />
+      <AccountForm user={auth.currentUser!} />
     </div>
   );
 }
